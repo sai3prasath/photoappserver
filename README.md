@@ -1,1 +1,3 @@
 # photoappserver
+
+readme updated
