@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 //app.use(bodyParser.json());
 const server = http.createServer(app);
 
-const port = process.env.PORT || 1337;
+const port = process.env.PORT;
 
 const wss = new WebSocket.Server({ server });
 
