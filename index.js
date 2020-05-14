@@ -78,10 +78,10 @@ wss.on('connection', function connection(ws, req) {
     isConsultationVisible = data.isConsultationVisible;
     console.log('received: %s', parsed.isMobileView);
     wsclient.send(JSON.stringify({ patientdata: patientData,username:userName,isConsultationVisible:isConsultationVisible, isMobileView: isMobileView }));
-//     for (var i = 0; i < wsclients.length; i++) {
-//       wsclients[i].ws.send(JSON.stringify({ data: parsed, isMobileView: isMobileView }));
-//     }
-    getData(parsed);
+    for (var i = 0; i < wsclients.length; i++) {
+      wsclients[i].ws.send(JSON.stringify({ data: parsed, isMobileView: isMobileView }));
+    }
+    //getData(parsed);
   });
   ws.isAlive = true;
   ws.on('pong', heartbeat);
