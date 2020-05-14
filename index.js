@@ -74,8 +74,10 @@ wss.on('connection', function connection(ws, req) {
     var parsed = JSON.parse(data);
     isMobileView = parsed.isMobileView;
     console.log('received: %s', parsed.isMobileView);
-    //  var objectString = JSON.stringify(parsed) + '~' + isMobileView;
-    wsclient.send(JSON.stringify({ data: parsed, isMobileView: isMobileView }));
+    // wsclient.send(JSON.stringify({ data: parsed, isMobileView: isMobileView }));
+    for (var i = 0; i < wsclients.length; i++) {
+      wsclients[i].ws.send(JSON.stringify({ data: parsed, isMobileView: isMobileView }));
+    }
     getData(parsed);
   });
   ws.isAlive = true;
@@ -110,10 +112,10 @@ app.use(function (req, res, next) {
 //   res.json({"uid":"sample"});
 // });
 
-// app.get('/getdata',function(req,res) {
-//   res.json({patdata:patientData});
-//   res.end();
-// });
+app.get('/getdata',function(req,res) {
+  res.json({patientdata:patientData,username:userName,isConsultationVisible:isConsultationVisible,isMobileView:isMobileView});
+  res.end();
+});
 
 app.get('/Get-Personalization-Mobile/:authdata', function (req, res) {
   //http://172.26.1.31:8000/Get-Personalization-Mobile/713082-4943-10101
@@ -143,7 +145,7 @@ app.get('/Get-Personalization-Mobile/:authdata', function (req, res) {
   finally {
     res.json(r);
   }
-})
+});
 
 app.post('/posttoken', function (req, res) {
   var user_name = req.body.user;
