@@ -77,9 +77,9 @@ wss.on('connection', function connection(ws, req) {
     userName = data.userName;
     isConsultationVisible = data.isConsultationVisible;
     console.log('received: %s', parsed.isMobileView);
-    wsclient.send(JSON.stringify({ patientdata: patientData,username:userName,isConsultationVisible:isConsultationVisible, isMobileView: isMobileView }));
+//     wsclient.send(JSON.stringify({ patientdata: patientData,username:userName,isConsultationVisible:isConsultationVisible, isMobileView: isMobileView }));
     for (var i = 0; i < wsclients.length; i++) {
-      wsclients[i].ws.send(JSON.stringify({ data: parsed, isMobileView: isMobileView }));
+      wsclients[i].ws.send(JSON.stringify({ patientdata: patientData,username:userName,isConsultationVisible:isConsultationVisible, isMobileView: isMobileView }));
     }
     //getData(parsed);
   });
