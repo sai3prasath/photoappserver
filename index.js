@@ -2,7 +2,7 @@ var express = require('express')
 var bodyParser = require("body-parser");
 var app = express()
 var http = require('http');
-var WebSocket = require('ws');
+// var WebSocket = require('ws');
 var wsclient;
 var isAlive;
 var wsclients = [];
@@ -47,48 +47,59 @@ const interval = setInterval(function ping() {
   });
 }, 2000);
 
-wss.on('connection', function connection(ws, req) {
-  console.log("ws connection", req.url);
-  wsclient = ws;
-  personaclient = ws;
-  var ss = req.url;
-  var userid = "-1";
-  var _pos = ss.indexOf("?");
-  var queryParameters;
-  if (_pos > -1) {
-    queryParameters = ss.split('?')[1];
-    console.log(queryParameters);
-    if (queryParameters.indexOf('&') >= 0) {
-      var ismobileview = queryParameters.substr(queryParameters.indexOf('&') + 1, queryParameters.length).split('=')[1];
-      isMobileView = ismobileview; console.log(isMobileView);
-      userid = queryParameters.substr(_pos + 1, queryParameters.indexOf('&') - 2).split('=')[1];
-      //console.log(userid);
-    } else {
-      userid = ss.substring(_pos + 1).split('=')[1];
-    }
-    console.log(userid);
-    wsclients.push({ "user": userid, "ws": ws });
-  }
+var WebSocketServer = require('ws').Server
+  , wss = new WebSocketServer({ port: 8080 });
 
-  wsclient.on('message', function incoming(data) {
-    var parsed = JSON.parse(data);
-    isMobileView = parsed.isMobileView;
-    patientData = data.patientdata;
-    userName = data.userName;
-    isConsultationVisible = data.isConsultationVisible;
-    console.log('received: %s', parsed.isMobileView);
-//     wsclient.send(JSON.stringify({ patientdata: patientData,username:userName,isConsultationVisible:isConsultationVisible, isMobileView: isMobileView }));
-    for (var i = 0; i < wsclients.length; i++) {
-      wsclients[i].ws.send(JSON.stringify({ patientdata: patientData,username:userName,isConsultationVisible:isConsultationVisible, isMobileView: isMobileView }));
-    }
-    //getData(parsed);
-  });
-  ws.isAlive = true;
-  ws.on('pong', heartbeat);
-  ws.on('close', function close() {
-    clearInterval(interval);
+wss.on('connection', function connection(ws) {
+  ws.on('message', function incoming(message) {
+    this.send(message);
+    console.log(this.upgradeReq.headers['sec-websocket-key']);
   });
 });
+
+// wss.on('connection', function connection(ws, req) {
+//   console.log("ws connection", req.url);
+//   wsclient = ws;
+//   personaclient = ws;
+//   var ss = req.url;
+//   var userid = "-1";
+//   var _pos = ss.indexOf("?");
+//   var queryParameters;
+//   if (_pos > -1) {
+//     queryParameters = ss.split('?')[1];
+//     console.log(queryParameters);
+//     if (queryParameters.indexOf('&') >= 0) {
+//       var ismobileview = queryParameters.substr(queryParameters.indexOf('&') + 1, queryParameters.length).split('=')[1];
+//       isMobileView = ismobileview; console.log(isMobileView);
+//       userid = queryParameters.substr(_pos + 1, queryParameters.indexOf('&') - 2).split('=')[1];
+//       //console.log(userid);
+//     } else {
+//       userid = ss.substring(_pos + 1).split('=')[1];
+//     }
+//     console.log(userid);
+//     wsclients.push({ "user": userid, "ws": ws });
+//   }
+
+//   wsclient.on('message', function incoming(data) {
+//     var parsed = JSON.parse(data);
+//     isMobileView = parsed.isMobileView;
+//     patientData = data.patientdata;
+//     userName = data.userName;
+//     isConsultationVisible = data.isConsultationVisible;
+//     console.log('received: %s', parsed.isMobileView);
+// //     wsclient.send(JSON.stringify({ patientdata: patientData,username:userName,isConsultationVisible:isConsultationVisible, isMobileView: isMobileView }));
+//     for (var i = 0; i < wsclients.length; i++) {
+//       wsclients[i].ws.send(JSON.stringify({ patientdata: patientData,username:userName,isConsultationVisible:isConsultationVisible, isMobileView: isMobileView }));
+//     }
+//     //getData(parsed);
+//   });
+//   ws.isAlive = true;
+//   ws.on('pong', heartbeat);
+//   ws.on('close', function close() {
+//     clearInterval(interval);
+//   });
+// });
+
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
