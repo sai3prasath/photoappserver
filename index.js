@@ -133,10 +133,10 @@ app.use(function (req, res, next) {
 //   res.json({"uid":"sample"});
 // });
 
-app.get('/getdata',function(req,res) {
-  res.json({patientdata:patientData,username:userName,isConsultationVisible:isConsultationVisible,isMobileView:isMobileView});
-  res.end();
-});
+// app.get('/getdata',function(req,res) {
+//   res.json({patientdata:patientData,username:userName,isConsultationVisible:isConsultationVisible,isMobileView:isMobileView});
+//   res.end();
+// });
 
 app.get('/Get-Personalization-Mobile/:authdata', function (req, res) {
   //http://172.26.1.31:8000/Get-Personalization-Mobile/713082-4943-10101
