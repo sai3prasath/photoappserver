@@ -2,7 +2,7 @@ var express = require('express')
 var bodyParser = require("body-parser");
 var app = express()
 var http = require('http');
-// var WebSocket = require('ws');
+var WebSocket = require('ws');
 var wsclient;
 var isAlive;
 var wsclients = [];
