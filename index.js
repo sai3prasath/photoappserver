@@ -47,8 +47,8 @@ const interval = setInterval(function ping() {
   });
 }, 2000);
 
-var WebSocketServer = require('ws').Server
-  , wss = new WebSocketServer({ port: 8080 });
+// var WebSocketServer = require('ws').Server
+//   , wss = new WebSocketServer({ port: 8080 });
 
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
