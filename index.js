@@ -52,7 +52,7 @@ const interval = setInterval(function ping() {
 
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
-    this.send(message);
+    this.send('message from sai');
     console.log(this.upgradeReq.headers['sec-websocket-key']);
   });
 });
